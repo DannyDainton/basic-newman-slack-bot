@@ -2,7 +2,7 @@
 
 This is a basic `express` app with a single `POST` route, which will allow you to run Postman collections, either exported JSON files or from a shared Collection link via [newman](https://github.com/postmanlabs/newman).
 
-Everything that you will need to run the application is contained within this repo but in order for it to be accessible by Slack, it will need be to be publicly hosted _somewhere_. 
+Everything that you will need to run the application, including a couple of example Postman JSON files, is contained within this repo but in order for it to be accessible by Slack, it will need to be publicly hosted _somewhere_. 
 
 Where this location/platform is, will depend on your own context, you may have sensitive data in the files and you _might_ need to have a higher level over control so choose a place that suits your needs.
 
@@ -13,6 +13,8 @@ To use a Custom Slash Command in Slack, the running application needs to be a pu
 The localtunnel module will need to be globally installed, on a machine running nodejs, to do this use the command `npm install -g localtunnel` from the terminal.
 
 Clone this `basic-newman-slack-bot` repo and install all the npm modules using the `npm install` command in a terminal.
+
+**Note** - The `basic-newman-slack-bot` has been pre-loaded with a couple of example files, these files can be found in the `./collections` and `./environments` folders. The files will _tell_ `newman` where to make requests too. We'll be using the [Restful-Booker API](https://restful-booker.herokuapp.com/), this is a publicly available set of endpoints so it might be worth doing a quick check in your browser first, just to know that the API is alive....or you might see a lot of test failures :)
 
 In the same terminal, navigate to the cloned directory and start the `express` server using the `npm start` command. This will start the app on port `3000`.
 
@@ -42,13 +44,15 @@ Once you have a valid name, select a region and hit the "Deploy App" button.
 
 This will then build the application and deploy it on the Heroku platform, the whole process takes ~30 secs so it's super quick. :)
 
-### How can we start using this in Slack
+---
 
-For this demonstration on the usage of the `express` app, I have created my own personal Slack so I'm in full control of everything, this might not be the case for you, have quick a chat with whoever is the Admin and work with them to install the app into a Workspace.
+## How can we start using this in Slack
+
+For this demonstration on the usage of the `express` app, I have my own personal `dannysslack`, that I created so I'm in full control of everything, this might not be the case for you, have quick a chat with whoever is the Admin and work with them to install the app into a Workspace.
 
 It feels a bit wrong for me to just basically repeat Slack's documentation on how to add a Custom Slash Command to a Workspace - The effort and attention that these user guides have been given is amazing, it's really easy to follow and you get up and running in next to no time.
 
-I'm going to explain how to do it using the method I went through but for the full details, I would absolutely jump over to Slack and check out the [offical guide](https://api.slack.com/slash-commands). 
+I'm going to explain how to do it using the method I went through but for the full details, I would absolutely jump over to Slack and check out the [official guide](https://api.slack.com/slash-commands). 
 
 - Go to the [Create a slash command](https://api.slack.com/slash-commands) page
 - Scroll down to the "Creating a Slash Command" section and press the "Create your slack app" button
@@ -90,12 +94,14 @@ If the Newman Run failed before running the Collection or there was a syntax err
 
 ### Where do I go from here
 
-This is just an example using a set of files that mean nothing in your context. If you have a set of files containing non-sensitive information, you could add these to the `./collections` and `./environments` folders and then modify the `app.js` on lines 92 and 93 to point at your files. This will require a re-deploy, if you've deployed the `express` app already.
+This is just an example using a set of pre-loaded files that mean absolutely nothing in your context. If you have a set of Postman JSON files containing non-sensitive information, you could add these to the `./collections` and `./environments` folders and then modify the `app.js` on lines 92 and 93 to point at your files. 
 
-If you wanted to deploy the `express` app for use with an AWS Lambda, I would take a look at using [claudiajs](https://claudiajs.com/tutorials/serverless-express.html), it makes this process so simple and you would have it up and running in a similar time as it takes with Heroku.
+If you're suing the Heroku deployment, this will require a re-deploy, if you've deployed the `express` app already. If you're running this locally, you can just stop the server, add the files and run the `npm start` command again.
+
+As an alternative, if you wanted to deploy the `express` app for use with an AWS Lambda, I would take a look at using [claudiajs](https://claudiajs.com/tutorials/serverless-express.html), it makes this process so simple and you would have it up and running in a similar time as it takes with Heroku.
 
 ---
 
-Hope this is useful to anyone wanting to give it a go, I'm a novice JS coder and I totally know my limitations. My first iteration of the app "worked" and returned what I wanted it too everytime but the code was quite dodgy - I was shown a cleaner way of doing it by one of the awesome developers on our team, [Matt Davey](https://github.com/Matthew-Davey). He put me on the right path and this final version is very much his work too.
+Hope this is useful to anyone wanting to give it a go, I'm a novice JS coder and I totally know my limitations. My first iteration of the app "worked" and returned what I wanted it too every time but the code was quite dodgy - I was shown a cleaner way of doing it by one of the awesome developers on our team, [Matt Davey](https://github.com/Matthew-Davey). He put me on the right path and this final version is very much his work too.
 
 Enjoy....If you have any questions you can reach me on Twitter `@dannydainton`.
