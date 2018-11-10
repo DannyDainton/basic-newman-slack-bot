@@ -2,11 +2,29 @@
 
 This is a basic `express` app with a single `POST` route, which will allow you to run Postman collections, either exported JSON files or from a shared Collection link via [newman](https://github.com/postmanlabs/newman).
 
-Everything that you will need to run the application is contained within this repo but in order for it to be accessible by Slack, it will need be to be hosted _somewhere_. 
+Everything that you will need to run the application is contained within this repo but in order for it to be accessible by Slack, it will need be to be publicly hosted _somewhere_. 
 
 Where this location/platform is, will depend on your own context, you may have sensitive data in the files and you _might_ need to have a higher level over control so choose a place that suits your needs.
 
-Just as a means to *show* you it working and demonstrate something you _could_ do yourself, I'm going to be using [Heroku](https://www.heroku.com). This is a platform-as-a-service provider, that will allow me to deploy the application code onto a machine running `nodejs`, install all the dependency modules from the `package.json` file and give me a public facing URL as an entry point into the `express` app.
+## Locally running the express server
+
+To use a Custom Slash Command in Slack, the running application needs to be a publicly accessible endpoint - How do we get around this for testing? I've managed to workaround this and use my local machine as the host, by using the [localtunnel](https://localtunnel.github.io/www/) npm module.
+
+The localtunnel module will need to be globally installed, on a machine running nodejs, to do this use the command `npm install -g localtunnel` from the terminal.
+
+Clone this `basic-newman-slack-bot` repo and install all the npm modules using the `npm install` command in a terminal.
+
+In the same terminal, navigate to the cloned directory and start the `express` server using the `npm start` command. This will start the app on port `3000`.
+
+In separate terminal, use the `lt --port 3000` command, this will return a publicly available URL that can be used in Slack. 
+
+![Local Tunnel URL](./public/Local_Tunnel_URL.png)
+
+Follow the steps listed below in the '_How can we start using this in Slack_' section, that explains how to create the Custom Slash Command and start using the application. 
+
+## Deploying the app to Heroku
+
+Just as a means to *show* you it working outside of the local environment and demonstrate something you _could_ deploy yourself, I'm going to be using [Heroku](https://www.heroku.com). This is a platform-as-a-service provider, that will allow me to deploy the application code onto a machine running `nodejs`, install all the dependency modules from the `package.json` file and give me a public facing URL as an entry point into the `express` app.
 
 Heroku offers a free account which allows you to easily get up and running in seconds, as it's a free version, the app goes to 'sleep' after a longer period of inactivity but you 'wake it up' when it receives another `POST` request. Head over to [Heroku](https://signup.heroku.com/), sign up and Log yourself in.
 
