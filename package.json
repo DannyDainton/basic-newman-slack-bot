@@ -1,0 +1,19 @@
+{
+  "name": "basic-newman-slack-bot",
+  "version": "1.0.0",
+  "description": "A basic express app that allows you to run Postman collections with the Newman Runner",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "Danny Dainton",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "newman": "^4.1.0",
+    "pretty-ms": "^4.0.0"
+  }
+}
