@@ -8,7 +8,7 @@ Where this location/platform is, will depend on your own context, you may have s
 
 ## Locally running the express server
 
-To use a Custom Slash Command in Slack, the running application needs to be a publicly accessible endpoint - How do we get around this for testing? I've managed to workaround this and use my local machine as the host, by using the [localtunnel](https://localtunnel.github.io/www/) npm module.
+To use a Custom Slash Command in Slack, the running application needs to be a publicly accessible endpoint - How do we get around this for local testing? I've managed to workaround this and use my local machine as the host, by using the [localtunnel](https://localtunnel.github.io/www/) npm module.
 
 The localtunnel module will need to be globally installed, on a machine running nodejs, to do this use the command `npm install -g localtunnel` from the terminal.
 
@@ -94,11 +94,18 @@ If the Newman Run failed before running the Collection or there was a syntax err
 
 ### Where do I go from here
 
-This is just an example using a set of pre-loaded files that mean absolutely nothing in your context. If you have a set of Postman JSON files containing non-sensitive information, you could add these to the `./collections` and `./environments` folders and then modify the `app.js` on lines 92 and 93 to point at your files. 
+This is just an example using a set of pre-loaded files that mean absolutely nothing in your context. If you have a set of Postman JSON files containing non-sensitive information, you could add these to the `./collections` and `./environments` folders and then modify the `app.js` to point at your files. 
 
-If you're suing the Heroku deployment, this will require a re-deploy, if you've deployed the `express` app already. If you're running this locally, you can just stop the server, add the files and run the `npm start` command again.
+```javascript
+        newman.run({
+            collection: './collections/Restful_Booker_Collection.json',
+            environment: './environments/Restful_Booker_Environment.json'
+        }
+```
 
-As an alternative, if you wanted to deploy the `express` app for use with an AWS Lambda, I would take a look at using [claudiajs](https://claudiajs.com/tutorials/serverless-express.html), it makes this process so simple and you would have it up and running in a similar time as it takes with Heroku.
+If you _only_ have a `collection` file or a URL link to the collection, just remove the `environment` property, making sure that you also remove the comma at the end of the `collection` line. :)
+
+As an alternative deployment method, if you wanted to deploy the `express` app for use with an AWS Lambda, I would take a look at using [claudiajs](https://claudiajs.com/tutorials/serverless-express.html), it makes this process so simple and you would have it up and running in a similar time as it takes with Heroku.
 
 ---
 
