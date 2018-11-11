@@ -122,7 +122,7 @@ app.post("/newmanRun", (req, res) => {
             ]
         }
     })
-    .then(res.status(200).end())
+    .then(res.status(202).end())
     .then(executeNewman)
     .then(newmanResult => { return new TestRunContext(newmanResult) })
     .then(context => {
