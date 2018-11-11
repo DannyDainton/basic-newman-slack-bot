@@ -153,7 +153,6 @@ app.post("/newmanRun", (req, res) => {
                 ]
             }
         })
-        .then(res.status(500).end())
     })
 })
 const port = Number(process.env.PORT || 3000)
