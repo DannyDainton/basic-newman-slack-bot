@@ -12,15 +12,13 @@ To use a Custom Slash Command in Slack, the running server needs to be a publicl
 
 I've managed to workaround this and use my local machine as the host, by using the [localtunnel](https://localtunnel.github.io/www/) npm module.
 
-The localtunnel module will need to be globally installed, on a machine running nodejs, to do this use the command `npm install -g localtunnel` from the terminal.
-
 Clone this `basic-newman-slack-bot` repo and install all the npm modules using the `npm install` command in a terminal.
 
 **Note** - The `basic-newman-slack-bot` has been pre-loaded with a couple of example files, these files can be found in the `./collections` and `./environments` folders. The files will _tell_ `newman` where to make requests too. We'll be using the [Restful-Booker API](https://restful-booker.herokuapp.com/), this is a publicly available set of endpoints so it might be worth doing a quick check in your browser first, just to know that the API is alive....or you might see a lot of test failures :)
 
 In the same terminal, navigate to the cloned directory and start the `express` server using the `npm start` command. This will start the app on port `3000`.
 
-In separate terminal, use the `lt --subdomain newman-app --port 3000` command, this will return a publicly available URL that can be used in Slack. 
+In separate terminal, on the same directory, use the `npm run start-tunnel` command, this will return a publicly available URL that can be used in Slack. 
 
 ![Local Tunnel Link](./public/Local_Tunnel_Link.png)
 
