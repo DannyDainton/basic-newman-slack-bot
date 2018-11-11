@@ -14,11 +14,11 @@ I've managed to workaround this and use my local machine as the host, by using t
 
 Clone this `basic-newman-slack-bot` repo and install all the npm modules using the `npm install` command in a terminal.
 
-**Note** - The `basic-newman-slack-bot` has been pre-loaded with a couple of example files, these files can be found in the `./collections` and `./environments` folders. The files will _tell_ `newman` where to make requests too. We'll be using the [Restful-Booker API](https://restful-booker.herokuapp.com/), this is a publicly available set of endpoints so it might be worth doing a quick check in your browser first, just to know that the API is alive....or you might see a lot of test failures :)
+**Note** - _The `basic-newman-slack-bot` has been pre-loaded with a couple of example files, these files can be found in the `./collections` and `./environments` folders. The files will _tell_ `newman` where to make requests too. We'll be using the [Restful-Booker API](https://restful-booker.herokuapp.com/), this is a publicly available set of endpoints so it might be worth doing a quick check in your browser first, just to know that the API is alive....or you might see a lot of test failures_
 
 In the same terminal, navigate to the cloned directory and start the `express` server using the `npm start` command. This will start the app on port `3000`.
 
-In separate terminal, on the same directory, use the `npm run start-tunnel` command, this will return a publicly available URL that can be used in Slack. 
+In a separate terminal, within the same directory, use the `npm run start-tunnel` command, this will return a publicly available URL that can be used in Slack. 
 
 ![Local Tunnel Link](./public/Local_Tunnel_Link.png)
 
