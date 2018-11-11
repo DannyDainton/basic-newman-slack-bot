@@ -122,7 +122,7 @@ app.post("/newmanRun", (req, res) => {
             ]
         }
     })
-    .then(res.status(200).end())
+    .then(res.status(202).end())
     .then(executeNewman)
     .then(newmanResult => { return new TestRunContext(newmanResult) })
     .then(context => {
@@ -153,7 +153,6 @@ app.post("/newmanRun", (req, res) => {
                 ]
             }
         })
-        .then(res.status(500).end())
     })
 })
 const port = Number(process.env.PORT || 3000)
