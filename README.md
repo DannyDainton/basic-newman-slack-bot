@@ -8,7 +8,9 @@ Where this location/platform is, will depend on your own context, you may have s
 
 ## Locally running the express server
 
-To use a Custom Slash Command in Slack, the running application needs to be a publicly accessible endpoint - How do we get around this for local testing? I've managed to workaround this and use my local machine as the host, by using the [localtunnel](https://localtunnel.github.io/www/) npm module.
+To use a Custom Slash Command in Slack, the running server needs to be a publicly accessible - How do we get around this for local testing? 
+
+I've managed to workaround this and use my local machine as the host, by using the [localtunnel](https://localtunnel.github.io/www/) npm module.
 
 The localtunnel module will need to be globally installed, on a machine running nodejs, to do this use the command `npm install -g localtunnel` from the terminal.
 
@@ -18,9 +20,9 @@ Clone this `basic-newman-slack-bot` repo and install all the npm modules using t
 
 In the same terminal, navigate to the cloned directory and start the `express` server using the `npm start` command. This will start the app on port `3000`.
 
-In separate terminal, use the `lt --port 3000` command, this will return a publicly available URL that can be used in Slack. 
+In separate terminal, use the `lt --subdomain newman-app --port 3000` command, this will return a publicly available URL that can be used in Slack. 
 
-![Local Tunnel URL](./public/Local_Tunnel_URL.png)
+![Local Tunnel Link](./public/Local_Tunnel_Link.png)
 
 Follow the steps listed below in the '_How can we start using this in Slack_' section, that explains how to create the Custom Slash Command and start using the application. 
 
@@ -48,7 +50,7 @@ This will then build the application and deploy it on the Heroku platform, the w
 
 ## How can we start using this in Slack
 
-For this demonstration on the usage of the `express` app, I have my own personal `dannysslack`, that I created so I'm in full control of everything, this might not be the case for you, have quick a chat with whoever is the Admin and work with them to install the app into a Workspace.
+For this demonstration on the usage of the `express` app, I have my own personal `dannysslack`, that I created so I'm in full control of everything, this might not be the case for you. If your Slack workspace is locked down by an sort form of Admin, work with them to install the Custom Slash Command into the Workspace.
 
 It feels a bit wrong for me to just basically repeat Slack's documentation on how to add a Custom Slash Command to a Workspace - The effort and attention that these user guides have been given is amazing, it's really easy to follow and you get up and running in next to no time.
 
@@ -59,7 +61,7 @@ I'm going to explain how to do it using the method I went through but for the fu
 - In the dialog box, give your App a name (I called mine 'Newman Test Runner') and select the Workspace that the app will belong too
 - Press the "Create app" button
 - Select the "Slash Command" option and then press the "Create New Command" button
-- Choose a command "_/something_" and add your Heroku app URL and `POST` route path - For example: "https://dd-test-app.herokuapp.com/newmanRun" if using Heroku or "https://spotty-dragon-74.localtunnel.me/newmanRun" if running locally.
+- Choose a command "_/something_" and add your Heroku app URL and `POST` route path - For example: "https://dd-test-app.herokuapp.com/newmanRun" if using Heroku or "https://newman-app.localtunnel.me/newmanRun" if you're running it locally.
 - Give it a short description and press "Save"
 
 We have now created our Custom Slash Command but before we can use it in the Workspace, we need to authorize it first. 
@@ -105,7 +107,13 @@ This is just an example using a set of pre-loaded files that mean absolutely not
 
 If you _only_ have a `collection` file or a URL link to the collection, just remove the `environment` property, making sure that you also remove the comma at the end of the `collection` line. :)
 
-As an alternative deployment method, if you wanted to deploy the `express` app for use with an AWS Lambda, I would take a look at using [claudiajs](https://claudiajs.com/tutorials/serverless-express.html), it makes this process so simple and you would have it up and running in a similar time as it takes with Heroku.
+```javascript
+        newman.run({
+            collection: './collections/Restful_Booker_Collection.json'
+        }
+```
+
+As an alternative deployment method, if you wanted to deploy the `express` app on the AWS platform using a Lambda, I would take a look at using [claudiajs](https://claudiajs.com/tutorials/serverless-express.html), it makes this process so simple and you would have it up and running in a similar time as it takes with Heroku.
 
 ---
 

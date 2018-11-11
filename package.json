@@ -15,5 +15,9 @@
     "express": "^4.15.3",
     "newman": "^4.1.0",
     "pretty-ms": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DannyDainton/basic-newman-slack-bot.git"
   }
 }
