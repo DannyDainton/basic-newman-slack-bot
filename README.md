@@ -70,7 +70,7 @@ The Custom Slash Command is now created and Authorized to be used within the spe
 
 ---
 
-### Using the app in a slack channel
+## Using the app in a slack channel
 
 Once the Custom Slash Command has been created and authorized against your Workspace, you can now run the command and see the results returned. In the example below, I'm using the `/testrun` command, which I added during the Slack installation, to start the run - As you've added the app to the Workspace, it will show in the auto-complete/actions list.
 
@@ -92,7 +92,7 @@ If the Newman Run failed before running the Collection or there was a syntax err
 
 ---
 
-### Where do I go from here
+## Where do I go from here
 
 This is just an example using a set of pre-loaded files that mean absolutely nothing in your context. If you have a set of Postman JSON files containing non-sensitive information, you could add these to the `./collections` and `./environments` folders and then modify the `app.js` to point at your files. 
 
