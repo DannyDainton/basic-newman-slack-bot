@@ -22,7 +22,9 @@ In a separate terminal, within the same directory, use the `npm run start-tunnel
 
 ![Local Tunnel Link](./public/Local_Tunnel_Link.png)
 
-Follow the steps listed below in the '_How can we start using this in Slack_' section, that explains how to create the Custom Slash Command and start using the application. 
+**Note** - Be sure to note down the name of the URL that _localtunnel_ returns, I have often found that even though I specify a subdomain ('newman-app') to use, It sometimes ignores this and returns a random URL. This is important whem adding this URL to Slack.
+
+Follow the steps listed below in the [_How can we start using this in Slack_](https://github.com/DannyDainton/basic-newman-slack-bot/blob/master/README.md#how-can-we-start-using-this-in-slack) section, that explains how to create the Custom Slash Command and start using the application. 
 
 ## Deploying the app to Heroku
 
