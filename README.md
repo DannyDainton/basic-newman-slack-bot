@@ -76,6 +76,8 @@ Once the Custom Slash Command has been created and authorized against your Works
 
 In the `./collections` and `./environments` folders, I've added a sample set of files that will be used to test out the integration. Let's run the command using these files and take a look at the results.
 
+![Running In Slack](./public/Basic_Slack_Bot.gif)
+
 There are a couple of different responses that you will receive back into Slack once the Newman Run has completed. I'm just using a few of the details contained in the `newman summary object` that gets created after the newman test run and then displaying these in the Slack message.
 
 If all the tests `Pass`, your message will look something like this: 
