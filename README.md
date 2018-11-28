@@ -59,7 +59,7 @@ I'm going to explain how to do it using the method I went through but for the fu
 - In the dialog box, give your App a name (I called mine 'Newman Test Runner') and select the Workspace that the app will belong too
 - Press the "Create app" button
 - Select the "Slash Command" option and then press the "Create New Command" button
-- Choose a command "_/something_" and add your Heroku app URL and `POST` route path - For example: "https://dd-test-app.herokuapp.com/newmanRun" if using Heroku or "https://newman-app.localtunnel.me/newmanRun" if you're running it locally.
+- Choose a command "_/something_" and then add your app URL including the path `/newmanRun` - For example: "https://dd-test-app.herokuapp.com/newmanRun" if using Heroku or "https://newman-app.localtunnel.me/newmanRun" if you're running it locally.
 - Give it a short description and press "Save"
 
 We have now created our Custom Slash Command but before we can use it in the Workspace, we need to authorize it first. 
