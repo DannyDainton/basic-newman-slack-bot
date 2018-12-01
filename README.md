@@ -80,13 +80,17 @@ The files in the `./environments` folder have been pre-fixed with `Local`, `Stag
 
 ![Slack Bot Command](./public/Slack_Bot_Command.PNG)
 
+![Slack Bot Run](./public/Slack_Bot_Run.gif)
+
 The example environment files in this repo contain the same data, they will send the same requests to the same endpoints and you will get back the same responses for each one. You _could_ replace these files with your own configured environments and run your requests against different endpoints. The name of the `Environment File`, listed in the _Summary Test Result_ message is taken from the `name` property inside the `.JSON` file.
 
 ![Different Environments](./public/Slack_Bot_Environments.PNG)
 
 There is an optional `IterationCount` parameter that can be added, This value is set to `1` by default but can be changed by specifying a `number` in the run command.
 
-![Iteration Count Command](./public/Slack_Bot_Iteration_Count.PNG)
+![Iteration Count](./public/Slack_Bot_Iteration_Count.PNG)
+
+![Iteration Count Run Command](./public/Slack_Bot_Run_Iterations.gif)
 
 There are a couple of different responses that you will receive back into Slack once the Newman Run has completed. I'm just using a few of the details contained in the `newman summary object` that gets created after the newman test run and then displaying these in the Slack message.
 
