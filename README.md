@@ -3,14 +3,15 @@
 This is a basic [express](https://expressjs.com/) app with a single `POST` route, which will allow you to run Postman collections and environment files with [newman](https://github.com/postmanlabs/newman), straight from a Slack channel.
 
 <!-- TOC -->
+
 - [Installing the modules and running the express app on a local machine](#installing-the-modules-and-running-the-express-app-on-a-local-machine)
 - [Locally running the express app with Docker](#locally-running-the-express-app-with-docker)
 - [Installing the Newman Runner app in Slack](#installing-the-newman-runner-app-in-slack)
 - [Using the Newman Runner app in a Slack channel](#using-the-newman-runner-app-in-a-slack-channel)
 - [Deploying the express app to Heroku](#deploying-the-express-app-to-heroku)
 - [What else can I do with the express app](#what-else-can-i-do-with-the-express-app)
-<!-- /TOC -->
 
+<!-- /TOC -->
 
 ## Installing the modules and running the express app on a local machine
 
@@ -79,15 +80,23 @@ The files in the `./environments` folder have been pre-fixed with `Local`, `Stag
 
 ![Slack Bot Command](./public/Slack_Bot_Command.PNG)
 
-The files in this repo are all the same, they will send the same requests and you will get back the same responses, you _could_ replace these files with your own configured environments and run your requests against different endpoints.
+The example environment files in this repo contain the same data, they will send the same requests to the same endpoints and you will get back the same responses for each one. You _could_ replace these files with your own configured environments and run your requests against different endpoints. The name of the `Environment File`, listed in the _Summary Test Result_ message is taken from the `name` property inside the `.JSON` file.
 
 ![Different Environments](./public/Slack_Bot_Environments.PNG)
+
+There is an optional `IterationCount` parameter that can be added, This value is set to `1` by default but can be changed by specifying a `number` in the run command.
+
+![Iteration Count Command](./public/Slack_Bot_Iteration_Count.PNG)
 
 There are a couple of different responses that you will receive back into Slack once the Newman Run has completed. I'm just using a few of the details contained in the `newman summary object` that gets created after the newman test run and then displaying these in the Slack message.
 
 If all the tests `Pass`, your message will look something like this:
 
 ![Test Run Pass](./public/Slack_Bot_Pass.PNG)
+
+If you have specified an `iteractionCount`, it will look something like this:
+
+![Iteration Count Run](./public/Slack_Bot_Iteration_Count_Run.PNG)
 
 If there are any test failures from the Newman Run, these will be listed in the message under the `Test Failures` section:
 
@@ -105,7 +114,7 @@ Just as a means to *show* you it working outside of the local environment and de
 
 Heroku offers a free account which allows you to easily get up and running in seconds, as it's a free version, the app goes to 'sleep' after a longer period of inactivity but you 'wake it up' when it receives another `POST` request. Head over to [Heroku](https://signup.heroku.com/), sign up and Log yourself in.
 
-Once you're logged in, you can use the one click 'Deploy to Heroku' button - This will open the Heroku deploy page in the same window so I would recommend opening it in a new tab. I tried using HTML within the markdown to open it in a new window but apparently Github doesn't like this method. :( 
+Once you're logged in, you can use the one click 'Deploy to Heroku' button - This will open the Heroku deploy page in the same window so I would recommend opening it in a new tab. I tried using HTML within the markdown to open it in a new window but apparently GitHub doesn't like this method. :(
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/DannyDainton/basic-newman-slack-bot)
 
@@ -117,7 +126,7 @@ Give your application a unique name (I've called mine _dd-test-app_), this will 
 
 Once you have a valid name, select a region and hit the "Deploy App" button.
 
-This will then build the application and deploy it on the Heroku platform, the whole process takes ~30 secs so it's super quick. :)
+This will then build the application and deploy it on the Heroku platform, the whole process takes ~30 seconds so it's super quick. :)
 
 You will now be able to use the _https://dd-test-app.herokuapp.com/newmanRun_ URL, or whatever you called your app, within Slack by following the Custom Slash Command instructions.
 
@@ -135,19 +144,18 @@ This is just an example using a set of pre-loaded files that mean absolutely not
 
 ```javascript
         newman.run({
-            collection: './collections/Restful_Booker_Collection.json',
-            environment: './environments/Local_Restful_Booker_Environment.json',
+            collection: './collections/My_New_Collection.json',
+            environment: './environments/Local_My_New_Environment.json',
             reporters: ['cli']
         }
 ```
 
-The `newman.run` object has lots of different [options](https://github.com/postmanlabs/newman#newmanrunoptions-object--callback-function--run-eventemitter) available that will change the way the test run is configured. If you wanted to add an increased `iterationCount` or a `iterationData` file that holds specific values need for the run, it can be done in the following way.
+The `newman.run` object has lots of different [options](https://github.com/postmanlabs/newman#newmanrunoptions-object--callback-function--run-eventemitter) available that will change the way the test run is configured. If you wanted to add an `iterationData` file, that holds specific values needed for the run, it can be done in the following way. The relative path to the file would need to be correct.
 
 ```javascript
         newman.run({
             collection: './collections/Restful_Booker_Collection.json',
             environment: './environments/Local_Restful_Booker_Environment.json',
-            iterationCount: 6,
             iterationData: './mynewfolder/mydatafile.csv',
             reporters: ['cli']
         }

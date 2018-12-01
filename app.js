@@ -94,11 +94,12 @@ class TestRunContext {
     }
 }
 
-let executeNewman = (env) => {
+let executeNewman = (env, iterationCount) => {
     return new Promise((resolve, reject) => {
         newman.run({
             collection: './collections/Restful_Booker_Collection.json',
             environment: `./environments/${env}_Restful_Booker_Environment.json`,
+            iterationCount: iterationCount,
             reporters: ['cli']
         }, (err, summary) => {
             if (err) {
@@ -142,6 +143,8 @@ app.post("/newmanRun", (req, res) => {
         env = enteredEnv[0]
     }
     
+    const iterationCount = parseInt((channelText).split(" ")[1])
+
     axios({
         method: 'post',
         url: `${responseURL}`,
@@ -163,7 +166,7 @@ app.post("/newmanRun", (req, res) => {
         }
     })
     .then(res.status(202).end())
-    .then(() => executeNewman(env))
+    .then(() => executeNewman(env, iterationCount))
     .then(newmanResult => { return new TestRunContext(newmanResult) })
     .then(context => {
         return axios({
