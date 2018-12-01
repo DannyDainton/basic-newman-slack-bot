@@ -43,7 +43,7 @@ In a separate terminal, within the same directory, use the `npm run start-tunnel
 
 Running the app locally using Docker can achieved using the `docker-compose up` command from the terminal. This will create the images and start the containers, once started, you can use the same localtunnel created URL _https://newman-app.localtunnel.me_ within Slack.
 
-![Running Locally With Docker](./public/Running_Locally_With_Docker.PNG)
+![Running Locally With Docker](./public/Running_Locally_With_Docker.png)
 
 ---
 
