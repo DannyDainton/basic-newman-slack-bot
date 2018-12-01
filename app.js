@@ -9,6 +9,8 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 class TestRunContext {
     constructor(newmanResult) {
+        this.environment      = newmanResult.environment.name
+        this.iterationCount   = newmanResult.run.stats.iterations.total
         this.start            = new Date(newmanResult.run.timings.started)
         this.end              = new Date(newmanResult.run.timings.completed)
         this.responseAverage  = newmanResult.run.timings.responseAverage
@@ -16,6 +18,10 @@ class TestRunContext {
         this.testResultTotal  = newmanResult.run.stats.assertions.total
         this.testResultFailed = newmanResult.run.stats.assertions.failed
         this.failures         = newmanResult.run.failures
+    }
+    
+    get envFileName() {
+        return this.environment === undefined ? "No Environment file specified for the Newman Run" : this.environment
     }
     
     get failsList() {
@@ -43,11 +49,12 @@ class TestRunContext {
                     "fallback": "Newman Run Summary",
                     "color": `${this.colour}`,
                     "title": "Summary Test Result",
+                    "text": `Environment File: *${this.envFileName}*\n Total Run Duration: ${this.runDuration}`,
                     "mrkdwn": true,
                     "fields": [
                         {
-                            "title": "Total Run Duration",
-                            "value": `${this.runDuration}`,
+                            "title": "No. Of Iterations ",
+                            "value": `${this.iterationCount}`,
                             "short": true
                         },
                         {
@@ -86,11 +93,13 @@ class TestRunContext {
         }
     }
 }
-let executeNewman = function () {
+
+let executeNewman = (env) => {
     return new Promise((resolve, reject) => {
         newman.run({
             collection: './collections/Restful_Booker_Collection.json',
-            environment: './environments/Restful_Booker_Environment.json'
+            environment: `./environments/${env}_Restful_Booker_Environment.json`,
+            reporters: ['cli']
         }, (err, summary) => {
             if (err) {
                 return reject(err)
@@ -99,8 +108,39 @@ let executeNewman = function () {
         })
     })
 }
+
 app.post("/newmanRun", (req, res) => {   
+    
     const responseURL = req.body.response_url
+    const channelText = req.body.text
+
+    const enteredEnv = channelText.match(/((Local)|(Staging)|Production)/g)
+
+    if (enteredEnv === null) {
+        axios({
+            method: 'post',
+            url: `${responseURL}`,
+            headers: { "Content-Type": "application/json" },
+            data: { 
+                "response_type": "in_channel",
+                "attachments": [
+                    {
+                        "color": "danger",
+                        "title": "Invaild Environment Name",
+                        "fields": [
+                            {
+                                "value": 'The environment name you entered is incorrect. Please try again.'
+                            }
+                        ]
+                    }
+                ]
+            }
+        })
+        .then(res.status(202).end())
+        return
+    } else {
+        env = enteredEnv[0]
+    }
     
     axios({
         method: 'post',
@@ -115,7 +155,7 @@ app.post("/newmanRun", (req, res) => {
                     "mrkdwn": true,
                     "fields": [
                         {
-                            "value": "The Summary Report will be with you _very_ soon"
+                            "value": `Your Summary Report for the *${env}* environment will be with you _very_ soon`
                         }
                     ]
                 }
@@ -123,7 +163,7 @@ app.post("/newmanRun", (req, res) => {
         }
     })
     .then(res.status(202).end())
-    .then(executeNewman)
+    .then(() => executeNewman(env))
     .then(newmanResult => { return new TestRunContext(newmanResult) })
     .then(context => {
         return axios({

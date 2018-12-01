@@ -1,0 +1,15 @@
+version: "2"
+services:
+  webserver:
+    image: newman_slack_bot
+    container_name: newmanrunner
+    build: .
+    ports:
+      - "3000:3000"
+  localtunnel:
+    image: efrecon/localtunnel
+    container_name: localtunnel
+    links:
+      - webserver
+    command:
+      --local-host webserver --subdomain newman-app --port 3000
