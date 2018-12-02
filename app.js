@@ -6,6 +6,7 @@ const newman     = require('newman')
 const app        = express()
 
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(express.static('reports'));
 
 class TestRunContext {
     constructor(newmanResult) {
@@ -49,6 +50,7 @@ class TestRunContext {
                     "fallback": "Newman Run Summary",
                     "color": `${this.colour}`,
                     "title": "Summary Test Result",
+                    "title_link": "https://newman-app.localtunnel.me/htmlResults.html",
                     "text": `Environment File: *${this.envFileName}*\n Total Run Duration: ${this.runDuration}`,
                     "mrkdwn": true,
                     "fields": [
@@ -100,7 +102,13 @@ let executeNewman = (env, iterationCount) => {
             collection: './collections/Restful_Booker_Collection.json',
             environment: `./environments/${env}_Restful_Booker_Environment.json`,
             iterationCount: iterationCount,
-            reporters: ['cli']
+            reporters: ['cli', 'html'],
+            reporter: {
+                html: {
+                    export: './reports/htmlResults.html',
+                    template: './reports/templates/template.hbs'
+                }
+            }
         }, (err, summary) => {
             if (err) {
                 return reject(err)

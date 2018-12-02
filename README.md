@@ -150,7 +150,13 @@ This is just an example using a set of pre-loaded files that mean absolutely not
         newman.run({
             collection: './collections/My_New_Collection.json',
             environment: './environments/Local_My_New_Environment.json',
-            reporters: ['cli']
+            reporters: ['cli', 'html'],
+            reporter: {
+                html: {
+                    export: './reports/htmlResults.html',
+                    template: './reports/templates/template.hbs'
+                }
+            }
         }
 ```
 
@@ -164,6 +170,14 @@ The `newman.run` object has lots of different [options](https://github.com/postm
             reporters: ['cli']
         }
 ```
+
+I've added the [newman-reporter-html](https://github.com/postmanlabs/newman-reporter-html) module to the app, this creates a custom HTML report that will show the full summary of the newman test run. This is still a work in progress as the method of doing it outside of the local environment is a bit more involved. This will not store the results of each test run separately, it will over right the last run. This also by default aggregates all the iteration data together, which is not ideal.
+
+The message output looks the same but the `title` is now a hyperlink at points to _https://newman-app.localtunnel.me/htmlResults.html_ - By clicking this it will open up a report.
+
+![Slack_Bot_Report](./public/Slack_Bot_Report.PNG)
+
+This is very limited at the moment and I can't see this working anywhere other than the local environment. I will continue to work on this as it is an essential report mechanism for showing the full results of the test run.  
 
 ---
 
