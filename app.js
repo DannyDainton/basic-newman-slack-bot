@@ -3,6 +3,7 @@ const express    = require('express')
 const bodyParser = require('body-parser')
 const prettyMs   = require('pretty-ms')
 const newman     = require('newman')
+const fs         = require('fs')
 const app        = express()
 
 app.use(bodyParser.urlencoded({extended: true}))
@@ -96,11 +97,11 @@ class TestRunContext {
     }
 }
 
-let executeNewman = (env, iterationCount) => {
+let executeNewman = (environmentFile, iterationCount) => {
     return new Promise((resolve, reject) => {
         newman.run({
             collection: './collections/Restful_Booker_Collection.json',
-            environment: `./environments/${env}_Restful_Booker_Environment.json`,
+            environment: environmentFile,
             iterationCount: iterationCount,
             reporters: ['cli', 'html'],
             reporter: {
@@ -123,9 +124,14 @@ app.post("/newmanRun", (req, res) => {
     const responseURL = req.body.response_url
     const channelText = req.body.text
 
-    const enteredEnv = channelText.match(/((Local)|(Staging)|Production)/g)
+    const enteredEnv     = (channelText).split(" ")[0]
+    const iterationCount = parseInt((channelText).split(" ")[1])
+    
+    const filename = `./environments/${enteredEnv}_Restful_Booker_Environment.json`
+    
+    const fileNameCheck = fs.existsSync(filename)
 
-    if (enteredEnv === null) {
+    if (fileNameCheck === false) {
         axios({
             method: 'post',
             url: `${responseURL}`,
@@ -148,10 +154,8 @@ app.post("/newmanRun", (req, res) => {
         .then(res.status(202).end())
         return
     } else {
-        env = enteredEnv[0]
+        environmentFile = filename
     }
-    
-    const iterationCount = parseInt((channelText).split(" ")[1])
 
     axios({
         method: 'post',
@@ -166,7 +170,7 @@ app.post("/newmanRun", (req, res) => {
                     "mrkdwn": true,
                     "fields": [
                         {
-                            "value": `Your Summary Report for the *${env}* environment will be with you _very_ soon`
+                            "value": `Your Summary Report for the *${enteredEnv}* environment will be with you _very_ soon`
                         }
                     ]
                 }
@@ -174,7 +178,7 @@ app.post("/newmanRun", (req, res) => {
         }
     })
     .then(res.status(202).end())
-    .then(() => executeNewman(env, iterationCount))
+    .then(() => executeNewman(environmentFile, iterationCount))
     .then(newmanResult => { return new TestRunContext(newmanResult) })
     .then(context => {
         return axios({

@@ -143,18 +143,23 @@ You will now be able to use the _https://dd-test-app.herokuapp.com/newmanRun_ UR
 
 ### Change the environment file names
 
-Currently, there is a terrible bit of regex (`.match(/((Local)|(Staging)|Production)/g)`) in the `app.js` file which sets the `env` variable, to point to a specific filename. It _only_ checks to see if the word `Local`, `Staging` or `Production` has been used in the Slack command. If it doesn't recognise the environment name that was entered, you will see a message returned:
+Currently, there is mechanism in place that will check that the `environment` value entered in the Slack command, matches a filename in the `./environments` folder. If it doesn't find that filename in the `./environments` folder, you will see this message returned:
 
 ![Invalid File Name](./public/Invalid_File_Name.PNG)
 
-This can been altered, removed or anything that suits your needs. It was put in to show that pointing to a different environment file _could_ be done from Slack but it absolutely has it's flaws and there will be a cleaner more robust way of doing it.  
+You could modify this filename check and the `newman.run` object to point to your own files, in the `./collections` and `./environments` folders. 
 
-You could modify the `newman.run` object to point to your own files, in the `./collections` and `./environments` folders. In the example below, if your environment file was named `Local_Environment.json` - Using the `/testrun Local` command within Slack would run the requests using those values in the file.
+In the example below, if your environment file was named `Local_Environment.json` - Using the `/testrun Local` command within Slack, would check that the filename exists in the `./environments` folder and then run the requests using those values in the file. You would need to change the `filename` variable in the `app.js` file to match your own naming convention.
+
+```javascript
+    const filename = `./environments/${enteredEnv}_Environment.json`
+```
+
 
 ```javascript
         newman.run({
             collection: './collections/My_New_Collection.json',
-            environment: `./environments/${env}_Environment.json`,
+            environment: environmentFile,
             iterationCount: iterationCount,
             reporters: ['cli', 'html'],
             reporter: {
