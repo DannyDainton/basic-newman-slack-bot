@@ -135,7 +135,7 @@ app.post("/newmanRun", (req, res) => {
                 "attachments": [
                     {
                         "color": "danger",
-                        "title": "Invaild Environment Name",
+                        "title": "Invalid Environment Name",
                         "fields": [
                             {
                                 "value": 'The environment name you entered is incorrect. Please try again.'
