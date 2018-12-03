@@ -23,6 +23,10 @@ class TestRunContext {
         this.failures         = newmanResult.run.failures
     }
     
+    get percentagePassed() {
+        return (this.testResultTotal * 100 / (this.testResultTotal + this.testResultFailed)).toFixed(2)
+    }
+
     get envFileName() {
         return this.environment === undefined ? "No Environment file specified for the Newman Run" : this.environment
     }
@@ -53,7 +57,7 @@ class TestRunContext {
                     "color": `${this.colour}`,
                     "title": "Summary Test Result",
                     "title_link": "https://newman-app.localtunnel.me/htmlResults.html",
-                    "text": `Environment File: *${this.envFileName}*\n Total Run Duration: ${this.runDuration}`,
+                    "text": `Environment File: *${this.envFileName}*\nAssertion Pass Percentage: *${this.percentagePassed}%*\nTotal Run Duration: *${this.runDuration}*`,
                     "mrkdwn": true,
                     "fields": [
                         {
