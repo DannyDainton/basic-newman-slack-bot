@@ -10,6 +10,9 @@ This is a basic [express](https://expressjs.com/) app with a single `POST` route
 - [Using the Newman Runner app in a Slack channel](#using-the-newman-runner-app-in-a-slack-channel)
 - [Deploying the express app to Heroku](#deploying-the-express-app-to-heroku)
 - [What else can I do with the express app](#what-else-can-i-do-with-the-express-app)
+    - [Change the environment file names](#change-the-environment-file-names)
+    - [Add additional Newman options](#add-additional-newman-options)
+    - [Custom HTML Reports](#custom-html-reports)
 
 <!-- /TOC -->
 
@@ -138,18 +141,21 @@ You will now be able to use the _https://dd-test-app.herokuapp.com/newmanRun_ UR
 
 ## What else can I do with the express app
 
-This is a terrible bit of regex in the `app.js` file which sets the `environment` file name. It currently only picks up the words `Local`, `Staging` and `Production`. If your command doesn't match these you will see a message returned:
+### Change the environment file names
+
+Currently, there is a terrible bit of regex (`.match(/((Local)|(Staging)|Production)/g)`) in the `app.js` file which sets the `env` variable, to point to a specific filename. It _only_ checks to see if the word `Local`, `Staging` or `Production` has been used in the Slack command. If it doesn't recognise the environment name that was entered, you will see a message returned:
 
 ![Invalid File Name](./public/Invalid_File_Name.PNG)
 
-This can been altered, removed or anything that suits your needs. It was put in to show that pointing to a different environment file could be done from Slack but it absolutely has it's flaws.  
+This can been altered, removed or anything that suits your needs. It was put in to show that pointing to a different environment file _could_ be done from Slack but it absolutely has it's flaws and there will be a cleaner more robust way of doing it.  
 
-This is just an example using a set of pre-loaded files that mean absolutely nothing in your context. If you have a set of Postman JSON files containing non-sensitive information, you could add these to the `./collections` and `./environments` folders and then modify the file names in the `app.js` file.
+You could modify the `newman.run` object to point to your own files, in the `./collections` and `./environments` folders. In the example below, if your environment file was named `Local_Environment.json` - Using the `/testrun Local` command within Slack would run the requests using those values in the file.
 
 ```javascript
         newman.run({
             collection: './collections/My_New_Collection.json',
-            environment: './environments/Local_My_New_Environment.json',
+            environment: `./environments/${env}_Environment.json`,
+            iterationCount: iterationCount,
             reporters: ['cli', 'html'],
             reporter: {
                 html: {
@@ -160,24 +166,47 @@ This is just an example using a set of pre-loaded files that mean absolutely not
         }
 ```
 
+### Add additional Newman options
+
 The `newman.run` object has lots of different [options](https://github.com/postmanlabs/newman#newmanrunoptions-object--callback-function--run-eventemitter) available that will change the way the test run is configured. If you wanted to add an `iterationData` file, that holds specific values needed for the run, it can be done in the following way. The relative path to the file would need to be correct.
 
 ```javascript
         newman.run({
             collection: './collections/Restful_Booker_Collection.json',
             environment: './environments/Local_Restful_Booker_Environment.json',
+            iterationCount: iterationCount,
             iterationData: './mynewfolder/mydatafile.csv',
-            reporters: ['cli']
+            reporters: ['cli', 'html'],
+            reporter: {
+                html: {
+                    export: './reports/htmlResults.html',
+                    template: './reports/templates/template.hbs'
+                }
+            }
         }
 ```
 
-I've added the [newman-reporter-html](https://github.com/postmanlabs/newman-reporter-html) module to the app, this creates a custom HTML report that will show the full summary of the newman test run. This is still a work in progress as the method of doing it outside of the local environment is a bit more involved. This will not store the results of each test run separately, it will over right the last run. This also by default aggregates all the iteration data together, which is not ideal.
+### Custom HTML Reports
 
-The message output looks the same but the `title` is now a hyperlink at points to _https://newman-app.localtunnel.me/htmlResults.html_ - By clicking this it will open up a report.
+I've added the [newman-reporter-html](https://github.com/postmanlabs/newman-reporter-html) module to the app, this creates a custom HTML report that will show the full summary of the newman test run.  
+
+This will **not** store the results of each test run separately, it will overwrite the last run. This also, by default, aggregates all the iteration data together, which is not ideal. This can be handled with a custom report template to separate each run but for now it has this limitation.
+
+The Slack message output looks the _same_ but the `title` is now a hyperlink that points to _https://newman-app.localtunnel.me/htmlResults.html_ - By clicking this link, it will open up the report in a new browser tab.
 
 ![Slack_Bot_Report](./public/Slack_Bot_Report.PNG)
 
-This is very limited at the moment and I can't see this working anywhere other than the local environment. I will continue to work on this as it is an essential report mechanism for showing the full results of the test run.  
+The report is created using an optional custom template file, this can be found in the `./reports/templates` folder. The `newman-reporter-html` reporter will just create a default styled report if you don't add the `template` property.
+
+If you choose to use the [_Deploying the express app to Heroku_](#deploying-the-express-app-to-heroku) method to host your express app, you will need to change the `title-link` property in the `app.js` file, to point to your heroku app URL, in order to see the generated report. Currently, this is hardcoded to the local URL.
+
+For example:
+
+```javascript
+    "title_link": "https://your-heroku-app.herokuapp.com/htmlResults.html"
+```
+
+The HTML report functionality is still very limited, I will be improving this to give you the ability to store the reports. I use a method to store the reports to an AWS S3 bucket but this isn't really a generic solution to add to the express app.
 
 ---
 
