@@ -147,7 +147,7 @@ Currently, there is mechanism in place that will check that the `environment` va
 
 ![Invalid File Name](./public/Invalid_File_Name.PNG)
 
-You could modify this filename check and the `newman.run` object to point to your own files, in the `./collections` and `./environments` folders. 
+You could modify this filename check and the `newman.run` object to point to your own files, in the `./collections` and `./environments` folders.
 
 In the example below, if your environment file was named `Local_Environment.json` - Using the `/testrun Local` command within Slack, would check that the filename exists in the `./environments` folder and then run the requests using those values in the file. You would need to change the `filename` variable in the `app.js` file to match your own naming convention.
 

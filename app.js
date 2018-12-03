@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const prettyMs   = require('pretty-ms')
 const newman     = require('newman')
 const fs         = require('fs')
+const path       = require('path')
 const app        = express()
 
 app.use(bodyParser.urlencoded({extended: true}))
@@ -119,6 +120,31 @@ let executeNewman = (environmentFile, iterationCount) => {
     })
 }
 
+function InvalidName(responseURL, message, res) {
+    axios({
+        method: 'post',
+        url: `${responseURL}`,
+        headers: { "Content-Type": "application/json" },
+        data: {
+            "response_type": "in_channel",
+            "attachments": [
+                {
+                    "color": "danger",
+                    "title": "Invalid Environment",
+                    "mrkdwn": true,
+                    "fields": [
+                        {
+                            "value": `${message}`
+                        }
+                    ]
+                }
+            ]
+        }
+    })
+    .then(res.status(202).end());
+    return;
+}
+
 app.post("/newmanRun", (req, res) => {   
     
     const responseURL = req.body.response_url
@@ -131,28 +157,18 @@ app.post("/newmanRun", (req, res) => {
     
     const fileNameCheck = fs.existsSync(filename)
 
-    if (fileNameCheck === false) {
-        axios({
-            method: 'post',
-            url: `${responseURL}`,
-            headers: { "Content-Type": "application/json" },
-            data: { 
-                "response_type": "in_channel",
-                "attachments": [
-                    {
-                        "color": "danger",
-                        "title": "Invalid Environment Name",
-                        "fields": [
-                            {
-                                "value": 'The environment name you entered is incorrect. Please try again.'
-                            }
-                        ]
-                    }
-                ]
-            }
-        })
-        .then(res.status(202).end())
-        return
+    if (channelText.length === 0) {
+        
+        message = "Please enter an valid *Environment* name."
+        
+        return InvalidName(responseURL, message, res)
+
+    } else if (fileNameCheck === false) {
+        
+        message = `Could not find the *${path.basename(filename)}* environment file. Please try again.` 
+        
+        return InvalidName(responseURL, message, res)
+
     } else {
         environmentFile = filename
     }
