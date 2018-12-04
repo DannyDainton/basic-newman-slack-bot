@@ -49,6 +49,8 @@ Running the app locally using Docker can achieved using the `docker-compose up` 
 
 ![Running Locally With Docker](./public/Running_Locally_With_Docker.png)
 
+**Note** - If you make changes to any of the files or add things like your own `collection` or `environment` files, you will need to run the `docker-compose build` command, for the changes to take effect.
+
 ---
 
 ## Installing the Newman Runner app in Slack
@@ -140,6 +142,8 @@ You will now be able to use the _https://dd-test-app.herokuapp.com/newmanRun_ UR
 ---
 
 ## What else can I do with the express app
+
+**Note** - If you make changes to any of the files or add things like your own `collection` or `environment` files, you will need to run the `docker-compose build` command, for the changes to take effect.
 
 ### Change the environment file names
 
