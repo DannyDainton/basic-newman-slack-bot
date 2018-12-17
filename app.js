@@ -108,9 +108,9 @@ let executeNewman = (environmentFile, iterationCount) => {
             collection: './collections/Restful_Booker_Collection.json',
             environment: environmentFile,
             iterationCount: iterationCount,
-            reporters: ['cli', 'html'],
+            reporters: ['cli', 'htmlextra'],
             reporter: {
-                html: {
+                htmlextra: {
                     export: './reports/htmlResults.html',
                     template: './reports/templates/template.hbs'
                 }

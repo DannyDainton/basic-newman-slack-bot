@@ -165,9 +165,9 @@ In the example below, if your environment file was named `Local_Environment.json
             collection: './collections/My_New_Collection.json',
             environment: environmentFile,
             iterationCount: iterationCount,
-            reporters: ['cli', 'html'],
+            reporters: ['cli', 'htmlextra'],
             reporter: {
-                html: {
+                htmlextra: {
                     export: './reports/htmlResults.html',
                     template: './reports/templates/template.hbs'
                 }
@@ -185,9 +185,9 @@ The `newman.run` object has lots of different [options](https://github.com/postm
             environment: './environments/Local_Restful_Booker_Environment.json',
             iterationCount: iterationCount,
             iterationData: './mynewfolder/mydatafile.csv',
-            reporters: ['cli', 'html'],
+            reporters: ['cli', 'htmlextra'],
             reporter: {
-                html: {
+                htmlextra: {
                     export: './reports/htmlResults.html',
                     template: './reports/templates/template.hbs'
                 }
@@ -197,7 +197,7 @@ The `newman.run` object has lots of different [options](https://github.com/postm
 
 ### Custom HTML Reports
 
-I've added the [newman-reporter-html](https://github.com/postmanlabs/newman-reporter-html) module to the app, this creates a custom HTML report that will show the full summary of the newman test run.  
+I've added the [newman-reporter-htmlextra](https://github.com/DannyDainton/newman-reporter-htmlextra) module to the app, this creates a custom HTML report that will show the full summary of the newman test run.  
 
 This will **not** store the results of each test run separately, it will overwrite the last run. This also, by default, aggregates all the iteration data together, which is not ideal. This can be handled with a custom report template to separate each run but for now it has this limitation.
 
@@ -205,7 +205,7 @@ The Slack message output looks the _same_ but the `title` is now a hyperlink tha
 
 ![Slack_Bot_Report](./public/Slack_Bot_Report.PNG)
 
-The report is created using an optional custom template file, this can be found in the `./reports/templates` folder. The `newman-reporter-html` reporter will just create a default styled report if you don't add the `template` property.
+The report is created using an optional custom template file, this can be found in the `./reports/templates` folder. The `newman-reporter-htmlextra` reporter will just create a default styled report if you don't add the `template` property.
 
 If you choose to use the [_Deploying the express app to Heroku_](#deploying-the-express-app-to-heroku) method to host your express app, you will need to change the `title-link` property in the `app.js` file, to point to your heroku app URL, in order to see the generated report. Currently, this is hardcoded to the local URL.
 

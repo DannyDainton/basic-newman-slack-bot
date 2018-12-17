@@ -15,8 +15,8 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "localtunnel": "^1.9.1",
-    "newman": "^4.1.0",
-    "newman-reporter-html": "^1.0.2",
+    "newman": "^4.2.3",
+    "newman-reporter-htmlextra": "^1.1.0",
     "pretty-ms": "^4.0.0"
   },
   "repository": {
