@@ -21,6 +21,7 @@ class TestRunContext {
         this.testResultTotal  = newmanResult.run.stats.assertions.total
         this.testResultFailed = newmanResult.run.stats.assertions.failed
         this.failures         = newmanResult.run.failures
+        this.skipped          = newmanResult.skippedTests
     }
     
     get percentagePassed() {
@@ -31,23 +32,47 @@ class TestRunContext {
         return this.environment === undefined ? "No Environment file specified for the Newman Run" : this.environment
     }
     
+    get skippedList() {
+        if(this.skipped === undefined) {
+            return "No Skipped Tests"
+        }
+        else {
+            return this.skipped.reduce((accumulator, current) => `${accumulator} *${current.item.name}:* _${current.assertion}_\n\n`, '')
+        }
+    }
+
     get failsList() {
         return this.failures.length > 0
-            ? this.failures.reduce((accumulator, current) => `${accumulator} *${current.error.name}:* ${current.error.test} - _${current.error.message}_\n\n`, '')
+            ? this.failures.reduce((accumulator, current) => `${accumulator} *${current.error.name}:* ${current.source.name} - ${current.error.test} - _${current.error.message}_\n\n`, '')
             : "No Test Failures"
     }
+
+    get totalAssertions() {
+        if(this.skipped === undefined) {
+            return this.testResultTotal
+        }
+        else {
+            return  this.testResultTotal - this.skipped.length
+        }
+        
+    }
+
     get result() {
         return this.testResultFailed > 0 ? "Failed" : "Passed"
     }
+
     get runDuration() {
         return prettyMs(this.end - this.start)
     }
+
     get colour() {
         return this.testResultFailed > 0 ? "danger" : "good"
     }
+
     get averageResponseTime() {
         return prettyMs(this.responseAverage, {msDecimalDigits: 2})
     }
+
     get slackData() {
         return {
             "response_type": "in_channel",
@@ -57,7 +82,7 @@ class TestRunContext {
                     "color": `${this.colour}`,
                     "title": "Summary Test Result",
                     "title_link": "https://newman-app.localtunnel.me/htmlResults.html",
-                    "text": `Environment File: *${this.envFileName}*\nAssertion Pass Percentage: *${this.percentagePassed}%*\nTotal Run Duration: *${this.runDuration}*`,
+                    "text": `Environment File: *${this.envFileName}*\nTotal Run Duration: *${this.runDuration}*`,
                     "mrkdwn": true,
                     "fields": [
                         {
@@ -72,7 +97,7 @@ class TestRunContext {
                         },
                         {
                             "title": "No. Of Assertions",
-                            "value": `${this.testResultTotal}`,
+                            "value": `${this.totalAssertions}`,
                             "short": true
                             
                         },
@@ -90,6 +115,10 @@ class TestRunContext {
                             "title": "Result",
                             "value": `${this.result}`,
                             "short": true
+                        },
+                        {
+                            "title": "Skipped Tests",
+                            "value": `${this.skippedList}`
                         },
                         {
                             "title": "Test Failures",

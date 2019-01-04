@@ -107,6 +107,10 @@ If you have specified an `iteractionCount`, it will look something like this:
 
 ![Iteration Count Run](./public/Slack_Bot_Iteration_Count_Run.PNG)
 
+If any of the tests have been `skipped` from the Newman Run, these will be listed in the message under the `Skipped Tests` section. This will also adjust the `No. Of Assertions` to reflect the correct total of Tests run:
+
+![Skipped Tests](./public/Slack_Bot_Skipped_Tests.PNG)
+
 If there are any test failures from the Newman Run, these will be listed in the message under the `Test Failures` section:
 
 ![Test Run Failures](./public/Slack_Bot_Failures.PNG)
@@ -206,6 +210,26 @@ The Slack message output looks the _same_ but the `title` is now a hyperlink tha
 ![Slack_Bot_Report](./public/Slack_Bot_Report.PNG)
 
 The report is created using an optional custom template file, this can be found in the `./reports/templates` folder. The `newman-reporter-htmlextra` reporter will just create a default styled report if you don't add the `template` property.
+
+If you wanted a more `Dashboard` like report, I've added a basic one to the `./reports/templates` folder:
+
+![Dashboard Report](./public/Dashboard_Style_Report.PNG)
+
+To use this template, you will need to change the path of the `template` option:
+
+```javascript
+            reporters: ['htmlextra'],
+            reporter: {
+                htmlextra: {
+                    export: './reports/htmlResults.html',
+                    template: './reports/templates/dashboard-template.hbs'
+                }
+            }
+```
+This has the run information in different tabbed sections, select each of these will display the details. For example, the `Failed Tests` tab would should:
+
+![Dashboard Report](./public/Dashboard_Style_Report_Failed_Tab.PNG)
+
 
 If you choose to use the [_Deploying the express app to Heroku_](#deploying-the-express-app-to-heroku) method to host your express app, you will need to change the `title-link` property in the `app.js` file, to point to your heroku app URL, in order to see the generated report. Currently, this is hardcoded to the local URL.
 
