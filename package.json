@@ -16,7 +16,7 @@
     "express": "^4.15.3",
     "localtunnel": "^1.9.1",
     "newman": "^4.3.1",
-    "newman-reporter-htmlextra": "^1.2.2",
+    "newman-reporter-htmlextra": "^1.2.5",
     "pretty-ms": "^4.0.0"
   },
   "repository": {

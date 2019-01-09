@@ -203,32 +203,30 @@ The `newman.run` object has lots of different [options](https://github.com/postm
 
 I've added the [newman-reporter-htmlextra](https://github.com/DannyDainton/newman-reporter-htmlextra) module to the app, this creates a custom HTML report that will show the full summary of the newman test run.  
 
-This will **not** store the results of each test run separately, it will overwrite the last run. This also, by default, aggregates all the iteration data together, which is not ideal. This can be handled with a custom report template to separate each run but for now it has this limitation.
-
 The Slack message output looks the _same_ but the `title` is now a hyperlink that points to _https://newman-app.localtunnel.me/htmlResults.html_ - By clicking this link, it will open up the report in a new browser tab.
 
-![Slack_Bot_Report](./public/Slack_Bot_Report.PNG)
+![Dashboard Report](./public/Dashboard_Template.PNG)
 
 The report is created using an optional custom template file, this can be found in the `./reports/templates` folder. The `newman-reporter-htmlextra` reporter will just create a default styled report if you don't add the `template` property.
 
-If you wanted a more `Dashboard` like report, I've added a basic one to the `./reports/templates` folder:
-
-![Dashboard Report](./public/Dashboard_Style_Report.PNG)
-
-To use this template, you will need to change the path of the `template` option:
+To use a different template, you will need to change the path of the `template` option:
 
 ```javascript
             reporters: ['htmlextra'],
             reporter: {
                 htmlextra: {
                     export: './reports/htmlResults.html',
-                    template: './reports/templates/dashboard-template.hbs'
+                    template: '<path to template>'
                 }
             }
 ```
-This has the run information in different tabbed sections, select each of these will display the details. For example, the `Failed Tests` tab would should:
+This has the run information in different tabbed sections, selecting each of these will display the details of the newman run. 
 
-![Dashboard Report](./public/Dashboard_Style_Report_Failed_Tab.PNG)
+For example, this is the `Requests` and `Failed Tests` tabs:
+
+![Requests View](./public/Request_View.PNG)
+
+![Failed View](./public/Failed_View.PNG)
 
 
 If you choose to use the [_Deploying the express app to Heroku_](#deploying-the-express-app-to-heroku) method to host your express app, you will need to change the `title-link` property in the `app.js` file, to point to your heroku app URL, in order to see the generated report. Currently, this is hardcoded to the local URL.
