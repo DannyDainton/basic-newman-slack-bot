@@ -5,35 +5,39 @@
   <title>Newman Summary Report</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
   <link rel="stylesheet prefetch" href='https://use.fontawesome.com/releases/v5.0.10/css/all.css'>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
-  <style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github-gist.min.css">
+
+<style>
 body {
   padding-top:30px;
 }
+
 body, html {
   height:100%;
 }
+
 .badge-outline-success {
     color: #27ae60;
     border: 1px solid #27ae60;
     background-color: transparent;
 }
+
 .badge-outline {
     color: #040411;
     border: 1px solid #040411;
     background-color: transparent;
 }
+
 .card {
     overflow:hidden;
 }
+
 .card-body .rotate {
     z-index: 8;
     float: right;
     height: 100%;
 }
+
 .card-body .rotate i {
     color: rgba(20, 20, 20, 0.15);
     position: absolute;
@@ -52,10 +56,29 @@ body, html {
     max-height:350px;
     overflow-y:auto;
 }
+
 .nav-pills .nav-link.active {
     background-color: transparent!important;
 }
-  </style>
+
+#topOfScreen {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  outline: none;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+#topOfScreen:hover {
+  background-color: #28a745;
+}
+
+</style>
 </head>
 <body>
   <div class="container">
@@ -82,7 +105,7 @@ body, html {
 <div class="row">
 {{#with summary}}
   <div class="col-md-9 col-lg-12 main">
-   <h1 class="display-1 text-center">Newman Run Dashboard</h1>
+   <h1 class="display-2 text-center">Newman Run Dashboard</h1>
    <h4 class="text-center">{{moment date format="dddd, DD MMMM YYYY HH:mm:ss"}}</h4>
    <div class="row">
     <div class="col-lg-3 col-md-6">
@@ -132,7 +155,9 @@ body, html {
    </div>
    <hr>
     <div class="row">
-        <div class="col-sm-7">
+    <div class="col">
+        <div class="row">
+        <div class="col-sm-12 mb-3">
             <div class="card border-info">
                 <div class="card-body">
                 <h5 class="card-title text-uppercase text-white text-center bg-info">File Information</h5>
@@ -140,6 +165,24 @@ body, html {
                 {{#if environment.name}}<span><i class="fas fa-file-code"></i></span><strong> Environment:</strong> {{environment.name}}<br>{{/if}}
                 </div>
             </div>
+        </div>
+        </div>
+        {{#if collection.description}}
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="card border-info">
+                <div class="card-body">          
+                <h5 class="card-title text-uppercase text-white text-center bg-info">Collection Description</h5>
+                <div class="dyn-height">
+                    <pre id="description">{{collection.description}}</pre>
+                </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        {{/if}}
+        <div class="row">
+        <div class="col-sm-12 mb-3">
             <div class="card border-info">
                 <div class="card-body">
                 <h5 class="card-title text-uppercase text-white text-center bg-info">Timings and Data</h5>
@@ -149,57 +192,62 @@ body, html {
                 </div>
             </div>
         </div>
-    {{/with}}
-        <div class="col-sm-5">
-        <div class="table-responsive">
-    <table class="table table-striped table-bordered">
-        <thead class="thead-inverse">
-            <tr class="text-center">
-                <th class="text-uppercase">Summary Item</th>
-                <th class="text-uppercase">Total</th>
-                <th class="text-uppercase">Failed</th>
-            </tr>
-        </thead>
-        <tbody>
-        {{#with summary.stats}}
-            <tr>
-                <td>Requests</td>
-                <td class="text-center">{{requests.total}}</td>
-                <td class="text-center">{{requests.failed}}</td>
-            </tr>
-            <tr>
-                <td>Prerequest Scripts</td>
-                <td class="text-center">{{prerequestScripts.total}}</td>
-                <td class="text-center">{{prerequestScripts.failed}}</td>
-            </tr>
-            <tr>
-                <td>Test Scripts</td>
-                <td class="text-center">{{testScripts.total}}</td>
-                <td class="text-center">{{testScripts.failed}}</td>
-            </tr>
-            {{/with}}
-            {{#with summary}}
-            <tr class="{{#gt failures.length 0}}table-danger{{/gt}}">
-                <td>Assertions</td>
-                <td class="text-center">{{totalTests stats.assertions.total skippedTests.length}}</td>
-                <td class="text-center">{{stats.assertions.failed}}</td>
-            </tr>
-            <tr class="{{#gt skippedTests.length 0}}table-warning{{/gt}}">
-                <td>Skipped Tests</td>
-                <td class="text-center">{{#gt skippedTests.length 0}}{{skippedTests.length}}{{else}}0{{/gt}}</td>
-                <td class="text-center">-</td>
-            </tr>
-            {{/with}}
-        </tbody>
-    </table>
         </div>
-    </div>
+    {{/with}}
+        <div class="row">
+        <div class="col-sm-12 mb-3">
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-inverse">
+                    <tr class="text-center">
+                        <th class="text-uppercase">Summary Item</th>
+                        <th class="text-uppercase">Total</th>
+                        <th class="text-uppercase">Failed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#with summary.stats}}
+                    <tr>
+                        <td>Requests</td>
+                        <td class="text-center">{{requests.total}}</td>
+                        <td class="text-center">{{requests.failed}}</td>
+                    </tr>
+                    <tr>
+                        <td>Prerequest Scripts</td>
+                        <td class="text-center">{{prerequestScripts.total}}</td>
+                        <td class="text-center">{{prerequestScripts.failed}}</td>
+                    </tr>
+                    <tr>
+                        <td>Test Scripts</td>
+                        <td class="text-center">{{testScripts.total}}</td>
+                        <td class="text-center">{{testScripts.failed}}</td>
+                    </tr>
+                    {{/with}}
+                    {{#with summary}}
+                    <tr class="{{#gt failures.length 0}}table-danger{{/gt}}">
+                        <td>Assertions</td>
+                        <td class="text-center">{{totalTests stats.assertions.total skippedTests.length}}</td>
+                        <td class="text-center">{{stats.assertions.failed}}</td>
+                    </tr>
+                    <tr class="{{#gt skippedTests.length 0}}table-warning{{/gt}}">
+                        <td>Skipped Tests</td>
+                        <td class="text-center">{{#gt skippedTests.length 0}}{{skippedTests.length}}{{else}}0{{/gt}}</td>
+                        <td class="text-center">-</td>
+                    </tr>
+                    {{/with}}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    <hr>
    </div>
-   <hr>
+   </div>
   </div>
  </div>
         </div>
             <div class="tab-pane fade" id="pills-failed" role="tabcard" aria-labelledby="pills-failed-tab">
+
                 {{#if summary.failures.length}}
                     {{#with summary}}
                     <div class="alert alert-danger text-uppercase text-center">
@@ -210,14 +258,18 @@ body, html {
                     <div class="col-sm-12 mb-3">
                     <div class="card-deck">
                         <div class="card border-danger">
-                            <div class="card-header bg-danger text-white">
+                            <div class="card-header bg-danger text-white text-center text-uppercase">
                                 <h5 class="card-title">{{error.name}}</h5>
                             </div>
                             <div class="card-body">
-                                <strong>Iteration:</strong> {{inc cursor.iteration}}<br>
-                                <strong>Request Name:</strong> {{source.name}}<br>
-                                <strong>Failed Test:</strong> {{error.test}}<br>
-                                <strong>Error Description:</strong> {{error.message}}
+                                <h5><strong>Iteration:</strong> {{inc cursor.iteration}}</h5>
+                                <h5><strong>Request Name:</strong> {{source.name}}</h5>
+                                <h5><strong>Failed Test:</strong> {{error.test}}</h5>
+                            <hr>
+                            <h5 class="card-title text-uppercase text-white text-center bg-danger">Assertion Error Message</h5>
+                            <div>
+                                <pre><code>{{error.message}}</code></pre>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -231,6 +283,7 @@ body, html {
             </div>
 
             <div class="tab-pane fade" id="pills-skipped" role="tabcard" aria-labelledby="pills-skipped-tab">
+
                 {{#if summary.skippedTests.length}}
                     {{#with summary}}
                     <div class="alert alert-warning text-uppercase text-center">
@@ -241,12 +294,12 @@ body, html {
                     <div class="col-sm-12 mb-3">
                     <div class="card-deck">
                         <div class="card border-warning">
-                            <div class="card-header bg-warning text-white">
+                            <div class="card-header bg-warning text-white text-center text-uppercase">
                                 <h5 class="card-title">{{assertion}}</h5>
                             </div>
                             <div class="card-body">
-                                <strong>Iteration:</strong> {{inc cursor.iteration}}<br>
-                                <strong>Request Name:</strong> {{item.name}}
+                                <h5><strong>Iteration:</strong> {{inc cursor.iteration}}</h5>
+                                <h5><strong>Request Name:</strong> {{item.name}}</h5>
                             </div>
                         </div>
                     </div>
@@ -259,6 +312,8 @@ body, html {
                 {{/if}}
             </div>  
             <div class="tab-pane fade" id="pills-requests" role="tabcard" aria-labelledby="pills-requests-tab">
+            
+            <button class="btn btn-outline-success btn-sm" onclick="topFunction()" id="topOfScreen">Go To Top</button>
 
         {{!-- <div class="row">
             <div class="col-sm-12 mb-3">
@@ -288,24 +343,24 @@ body, html {
     <div class="row">
         <div class="col-sm-12 mb-3">
         <div class="card">
-            <div class="card-header bg-success">
+            <div class="card-header {{#if cumulativeTests.failed}} bg-danger{{else}} bg-success{{/if}}">
             <h5 class="card-title text-white">Iteration: {{inc cursor.iteration}} - {{item.name}}</h5>
             </div>
             <div class="card-body">
                 {{#with request}}
                 {{#if description.content}}
-                    <div class="row">
-                        <div class="col-sm-12 mb-3">
-                        <div class="card-deck">
-                            <div class="card border-info">
-                                <div class="card-body">
-                                    <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
-                                    <code id="description">{{description.content}}</code>
-                                </div>                    
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="card-deck">
+                        <div class="card border-info" style="width: 50rem;">
+                            <div class="card-body">
+                            <h5 class="card-title text-uppercase text-white text-center bg-info">Request Description</h5>
+                                <div class="dyn-height">
+                                    <p id="description">{{description.content}}</p>
+                                </div>
+                            </div>                    
                         </div>
                     </div>
+                </div>
                 {{/if}}
                 {{/with}}    
                 <div class="row">
@@ -321,28 +376,53 @@ body, html {
                         <div class="card border-info" style="width: 50rem;">
                             <div class="card-body">
                             <h5 class="card-title text-uppercase text-white text-center bg-info">Response Information</h5>
-                            <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="badge-outline badge badge-success"> {{response.code}} - {{response.status}}</span><br>
-                            <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="badge-outline badge badge-success"> {{mean.time}}</span><br>
-                            <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="badge-outline badge badge-success"> {{mean.size}}</span><br>
-                            <span><i class="fas fa-percent"></i></span><strong> Test Pass Percentage:</strong> <span class="badge-outline badge badge-success"> {{#gte cumulativeTests.passed 1}}{{percent cumulativeTests.passed cumulativeTests.failed}}{{else}}0{{/gte}}</span><br>
+                            <span><i class="fas fa-info-circle"></i></span><strong> Response Code:</strong> <span class="float-right badge-outline badge badge-success"> {{response.code}} - {{response.status}}</span><br>
+                            <span><i class="fas fa-stopwatch"></i></span><strong> Mean time per request:</strong> <span class="float-right badge-outline badge badge-success"> {{mean.time}}</span><br>
+                            <span><i class="fas fa-database"></i></span><strong> Mean size per request:</strong> <span class="float-right badge-outline badge badge-success"> {{mean.size}}</span><br>
+                            <hr>
+                            <h5 class="card-title text-uppercase text-white text-center bg-info">Test Pass Percentage</h5>
+                            <div>
+                                <div class="progress" style="height: 40px;">
+                                    <div class="progress-bar {{#if cumulativeTests.failed}} bg-danger{{else}} bg-success{{/if}}" style="width: 100%" role="progressbar">
+                                    <h5><strong>{{#gte cumulativeTests.passed 1}}{{percent cumulativeTests.passed cumulativeTests.failed}} %{{else}}0 %{{/gte}}</strong></h5>
+                                    </div>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>
                     </div>
-                </div>   
-
+                </div>
+                {{#with request}}
+                {{#if body.raw}}
                 <div class="row">
                 <div class="col-sm-12 mb-3">
                     <div class="card-deck">
-                    <div class="card border-info">
+                    <div class="card border-info" style="width: 50rem;">
+                        <div class="card-body">
+                            <h5 class="card-title text-uppercase text-white text-center bg-info">Request Body</h5>
+                                <div class="dyn-height">
+                                    <pre><code>{{body.raw}}</code></pre>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                {{/if}}
+                {{/with}}
+                <div class="row">
+                <div class="col-sm-12 mb-3">
+                    <div class="card-deck">
+                    <div class="card border-info" style="width: 50rem;">
                         <div class="card-body">
                             <h5 class="card-title text-uppercase text-white text-center bg-info">Response Body</h5>
                             {{#if response.body}}
                                 <div class="dyn-height">
-                                    <pre class="stringifyPretty">{{response.body}}</pre>
+                                        <pre><code id="copyText-{{item.id}}" class="prettyPrint">{{response.body}}</code></pre>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn btn-outline-secondary btn-sm" type="button" data-clipboard-text={{response.body}}>Copy to Clipboard</button>
+                                    <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-{{item.id}}">Copy to Clipboard</button>
                                 </div>
                             {{/if}}
                         </div>
@@ -367,6 +447,12 @@ body, html {
                                             <td class="text-center {{#if this.skipped}}bg-warning{{/if}}">{{this.skipped}}</td>
                                         </tr>
                                         {{/each}}
+                                        <tr class="bg-light">
+                                            <td><strong>Total</strong></td>
+                                            <td class="text-center">{{cumulativeTests.passed}}</td>
+                                            <td class="text-center">{{cumulativeTests.failed}}</td>
+                                            <td class="text-center">{{cumulativeTests.skipped}}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>                
@@ -383,78 +469,16 @@ body, html {
     </div>   
 {{/each}}
 {{/inline}}
-<!-- CSS Style for JSON Syntax Highlighting -->
-<style type="text/css">
-pre {
-        outline: 1px solid # ccc;
-        padding: 5px;
-        margin: 5px;
-}
-.json-string {
-        color: rgb(128, 0, 0);
-}
-.json-number {
-        color: rgb(255, 128, 0);
-}
-.json-boolean {
-        color: rgb(0, 0, 255);
-}
-.json-null {
-        color: rgb(0, 0, 255);
-}
-.json-key {
-        color: rgb(128, 0, 0);
-}
-</style>
 
-<!-- Copy Response Body To Clipboard -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 <script>
-    var clipboard = new ClipboardJS('.btn');
-    clipboard.on('success', function(e) {        
-        e.clearSelection();
-        $(".btn").addClass("bg-success text-white")
-        e.trigger.textContent = '✔ Copied!';
-        window.setTimeout(function() {
-            $(".btn").removeClass("bg-success text-white")
-            e.trigger.textContent = 'Copy to Clipboard';
-        }, 2000);
-    });
-    clipboard.on('error', function(e) {
-        e.clearSelection();
-        $(".btn").addClass("bg-danger text-white")
-        e.trigger.textContent = '✗ Not Copied';
-        window.setTimeout(function() {
-            $(".btn").removeClass("bg-danger text-white")
-            e.trigger.textContent = 'Copy to Clipboard';
-        }, 2000);
-    });
-</script>
-
-<!-- JSON Syntax Highlighting -->
-<script type="text/javascript">
-function syntaxHighlight(json) {
-        if (typeof json != 'string') {
-                    json = JSON.stringify(json, null, 2);
-        }
-        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                var cls = 'json-number';
-                if (/^"/.test(match)) {
-                        if (/:$/.test(match)) {
-                                cls = 'json-key';
-                        } else {
-                                cls = 'json-string';
-                        }
-                } else if (/true|false/.test(match)) {
-                        cls = 'json-boolean';
-                } else if (/null/.test(match)) {
-                        cls = 'json-null';
-                }
-                return '<span class="' + cls + '">' + match + '</span>';
-        });
-}
-// Verify if text is JSON
-function isJSON(data) 
+    function isJSON(data) 
 {
     var ret = true;
     try {
@@ -464,17 +488,43 @@ function isJSON(data)
     }
     return ret;
 }
-// Stringify each element with class 'stringifyPretty'
-$(".stringifyPretty").each(function () {        
+
+$(".prettyPrint").each(function () {        
         var data = $(this).text();
         // Verify whether data is JSON
         if(isJSON(data))
         {
                 obj = JSON.parse(data);
-                data = syntaxHighlight(obj);
+                data = JSON.stringify(obj, null, 2);
         }
-        $(this).html(data);
+        $(this).text(data);
 });
+</script>
+
+
+<!-- Copy Response Body To Clipboard -->
+<script>
+    var clipboard = new ClipboardJS('.copyButton');
+    
+    clipboard.on('success', function(e) {        
+        e.clearSelection();
+        $(".copyButton").addClass("bg-success text-white")
+        e.trigger.textContent = '✔ Copied!';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-success text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+    clipboard.on('error', function(e) {
+        e.clearSelection();
+        $(".copyButton").addClass("bg-danger text-white")
+        e.trigger.textContent = '✗ Not Copied';
+        window.setTimeout(function() {
+            $(".copyButton").removeClass("bg-danger text-white")
+            e.trigger.textContent = 'Copy to Clipboard';
+        }, 2000);
+    });
+
 </script>
 
 <!-- Filter the requests -->
@@ -502,4 +552,21 @@ $(document).ready(function(){
     function trim(string) {
         return string ? string.replace(/^ +| +$/gm, "") : string;
     }
+</script>
+
+<script>
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("topOfScreen").style.display = "block";
+  } else {
+    document.getElementById("topOfScreen").style.display = "none";
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
 </script>
