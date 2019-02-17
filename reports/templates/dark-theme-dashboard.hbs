@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Newman Summary Report</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
   <link rel="stylesheet prefetch" href='https://use.fontawesome.com/releases/v5.0.10/css/all.css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github-gist.min.css">
 
@@ -23,13 +23,17 @@ body, html {
 }
 
 .badge-outline {
-    color: #040411;
-    border: 1px solid #040411;
+    color: #27ae60;
+    border: 1px solid #27ae60;
     background-color: transparent;
 }
 
 .card {
     overflow:hidden;
+}
+
+.card-footer {
+    background-color:#4b4949;
 }
 
 .card-body .rotate {
@@ -75,7 +79,7 @@ body, html {
 }
 
 #topOfScreen:hover {
-  background-color: #28a745;
+  background-color: #00bc8ca8!important;
 }
 
 .custom-tab {
@@ -101,6 +105,40 @@ body, html {
 .card-header .collapsed .fa {
   transform: rotate(90deg);
 }
+
+.hljs {
+    background: #0f0f0f82!important;
+    color: #8d8787!important;
+}
+
+.bg-info {
+    background-color: #3498dbc2!important;
+}
+
+.bg-success {
+    background-color: #00bc8ca8!important;
+}
+
+.alert-success {
+    background-color: #00bc8ca8!important;
+}
+
+.bg-warning {
+    background-color: #f39c12cf!important;
+}
+
+.table-warning>td {
+    background-color: #f39c12cf!important;
+}
+
+.bg-danger {
+    background-color: #e74c3cc4!important;
+}
+
+.table-danger>td {
+    background-color: #e74c3cc4!important;
+}
+
 </style>
 </head>
 <body>
@@ -387,7 +425,7 @@ body, html {
 {{#each aggregations}}
         {{#if parent.name}}
         <div class="alert alert-dark text-uppercase text-center iteration-{{parent.iteration}}">
-        <a data-toggle="collapse" href="#" data-target="#folder-collapse-{{parent.id}}" aria-expanded="false" aria-controls="collapse" id="folder-{{parent.id}}" class="collapsed text-dark z-block">
+        <a data-toggle="collapse" href="#" data-target="#folder-collapse-{{parent.id}}" aria-expanded="false" aria-controls="collapse" id="folder-{{parent.id}}" class="collapsed text-white z-block">
             {{parent.name}} <i class="float-lg-right fa fa-chevron-down"></i>
         </a>
         </div>
@@ -511,7 +549,7 @@ body, html {
                                         <pre><code id="copyText-{{item.id}}" class="prettyPrint">{{response.body}}</code></pre>
                                 </div>
                                 <div class="card-footer">
-                                    <button class="btn btn-outline-secondary btn-sm copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-{{item.id}}">Copy to Clipboard</button>
+                                    <button class="btn btn-secondary copyButton" type="button" data-clipboard-action="copy" data-clipboard-target="#copyText-{{item.id}}">Copy to Clipboard</button>
                                 </div>
                             {{/if}}
                         </div>
