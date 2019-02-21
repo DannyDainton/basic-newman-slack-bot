@@ -189,11 +189,10 @@ The `newman.run` object has lots of different [options](https://github.com/postm
             environment: './environments/Local_Restful_Booker_Environment.json',
             iterationCount: iterationCount,
             iterationData: './mynewfolder/mydatafile.csv',
-            reporters: ['cli', 'htmlextra'],
+            reporters: ['htmlextra'],
             reporter: {
                 htmlextra: {
-                    export: './reports/htmlResults.html',
-                    template: './reports/templates/template.hbs'
+                    export: './reports/htmlResults.html'
                 }
             }
         }

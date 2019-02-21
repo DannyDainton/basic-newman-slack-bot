@@ -123,12 +123,20 @@ body, html {
     background-color: #00bc8ca8!important;
 }
 
+.alert-warning {
+    background-color: #ce8818!important
+}
+
 .bg-warning {
     background-color: #f39c12cf!important;
 }
 
 .table-warning>td {
-    background-color: #f39c12cf!important;
+    background-color: #ce8818!important;
+}
+
+.alert-danger {
+    background-color: #bd4539!important
 }
 
 .bg-danger {
@@ -136,7 +144,7 @@ body, html {
 }
 
 .table-danger>td {
-    background-color: #e74c3cc4!important;
+    background-color: #bd4539!important;
 }
 
 </style>
@@ -151,7 +159,7 @@ body, html {
                 <a class="nav-link text-white" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
             </li>
             <li class="nav-item bg-success" data-toggle="tooltip" title="Click to view the Requests">
-                <a class="nav-link text-white" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Requests <span class="badge badge-light">{{stats.requests.total}}</span></a>
+                <a class="nav-link text-white" id="pills-requests-tab" data-toggle="pill" href="#pills-requests" role="tab" aria-controls="pills-requests" aria-selected="false">Total Requests <span class="badge badge-light">{{stats.requests.total}}</span></a>
             </li>
             <li class="nav-item bg-danger" data-toggle="tooltip" title="Click to view the Failed Tests">
                 <a class="nav-link text-white" id="pills-failed-tab" data-toggle="pill" href="#pills-failed" role="tab" aria-controls="pills-failed" aria-selected="false">Failed Tests <span class="badge badge-light">{{failures.length}}</span></a>
@@ -171,7 +179,7 @@ body, html {
 <div class="row">
 {{#with summary}}
   <div class="col-md-9 col-lg-12 main">
-   <h1 class="display-2 text-center">Newman Run Dashboard</h1>
+   <h1 class="display-2 text-center">{{title}}</h1>
    <h4 class="text-center">{{moment date format="dddd, DD MMMM YYYY HH:mm:ss"}}</h4>
    <div class="row">
     <div class="col-lg-3 col-md-6">
@@ -362,12 +370,15 @@ body, html {
                     <div class="col-sm-12 mb-3">
                     <div class="card-deck">
                         <div class="card border-warning">
-                            <div class="card-header bg-warning text-white text-center text-uppercase">
-                                <h5 class="card-title">{{assertion}}</h5>
+                            <div class="card-header bg-warning text-white">
+                                <a data-toggle="collapse" href="#" data-target="#skipped-collapse-{{cursor.ref}}" aria-expanded="false" aria-controls="collapse" id="skipped-{{cursor.ref}}" class="collapsed text-white z-block">
+                                    Iteration {{inc cursor.iteration}} - {{assertion}} <i class="float-lg-right fa fa-chevron-down"></i>
+                                </a>
                             </div>
+                            <div id="skipped-collapse-{{cursor.ref}}" class="collapse" aria-labelledby="skipped-{{cursor.ref}}">
                             <div class="card-body">
-                                <h5><strong>Iteration:</strong> {{inc cursor.iteration}}</h5>
                                 <h5><strong>Request Name:</strong> {{item.name}}</h5>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -426,7 +437,7 @@ body, html {
         {{#if parent.name}}
         <div class="alert alert-dark text-uppercase text-center iteration-{{parent.iteration}}">
         <a data-toggle="collapse" href="#" data-target="#folder-collapse-{{parent.id}}" aria-expanded="false" aria-controls="collapse" id="folder-{{parent.id}}" class="collapsed text-white z-block">
-            {{parent.name}} <i class="float-lg-right fa fa-chevron-down"></i>
+            {{parent.name}} - {{executions.length}} {{#gt executions.length 1}}Requests{{else}}Request{{/gt}} in the folder <i class="float-lg-right fa fa-chevron-down"></i>
         </a>
         </div>
         <div id="folder-collapse-{{parent.id}}" class="collapse" aria-labelledby="folder-{{parent.id}}">
@@ -450,7 +461,7 @@ body, html {
         <div class="col-sm-12 mb-3 iteration-{{cursor.iteration}}">
         <div class="card iteration-{{cursor.iteration}}">
             <div class="card-header {{#if cumulativeTests.failed}} bg-danger{{else}} bg-success{{/if}} iteration-{{cursor.iteration}}">
-                <a data-toggle="collapse" href="#" data-target="#collapse-{{cursor.ref}}" aria-expanded="false" aria-controls="collapse" id="requests-{{cursor.ref}}" class="collapsed text-dark z-block">
+                <a data-toggle="collapse" href="#" data-target="#collapse-{{cursor.ref}}" aria-expanded="false" aria-controls="collapse" id="requests-{{cursor.ref}}" class="collapsed text-white z-block">
             Iteration: {{inc cursor.iteration}} - {{item.name}} <i class="float-lg-right fa fa-chevron-down"></i>
         </a>
             </div>
