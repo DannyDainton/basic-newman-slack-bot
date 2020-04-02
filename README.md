@@ -24,18 +24,9 @@ I've managed to workaround this and use my local machine as the host, by using t
 
 Clone this `basic-newman-slack-bot` repo and install all the npm modules using the `npm install` command in a terminal.
 
-The `basic-newman-slack-bot` has been pre-loaded with a few example files, these files can be found in the `./collections` and `./environments` folders:
+The `basic-newman-slack-bot` will search in your Postman workspace for the collection and the environment to execute tests. All you need is a valid API key. You can get your key from the [integrations dashboard](https://go.postman.co/integrations/services/pm_pro_api).
 
-```sh
-- collections
-    - Restful_Booker_Collection.json
-- environments
-    - Local_Restful_Booker_Environment.json
-    - Staging_Restful_Booker_Environment.json
-    - Production_Restful_Booker_Environment.json
-```
-
-These files will _tell_ `newman` where to make the requests too. We'll be using the [Restful-Booker API](https://restful-booker.herokuapp.com/), this is a publicly available set of endpoints, that I had no control over so it might be worth doing a quick check first, just to know that the API is alive....or you might see a lot of test failures.
+We'll be using the [Postman echo](https://docs.postman-echo.com/?version=latest), this is a publicly available Collection released by Postman team. It icnludes many examples in test scripts. 
 
 In the same terminal, navigate to the cloned directory and start the `express` server using the `npm start` command. This will start the app on port `3000`.
 
@@ -48,8 +39,6 @@ In a separate terminal, within the same directory, use the `npm run start-tunnel
 Running the app locally using Docker can achieved using the `docker-compose up` command from the terminal. This will create the images and start the containers, once started, you can use the same localtunnel created URL _https://newman-app.localtunnel.me_ within Slack.
 
 ![Running Locally With Docker](./public/Running_Locally_With_Docker.png)
-
-**Note** - If you make changes to any of the files or add things like your own `collection` or `environment` files, you will need to run the `docker-compose build` command, for the changes to take effect.
 
 ---
 
@@ -115,7 +104,7 @@ If there are any test failures from the Newman Run, these will be listed in the 
 
 ![Test Run Failures](./public/Slack_Bot_Failures.PNG)
 
-If the Newman Run failed before running the Collection or there was a syntax error within a test etc. This will return a `Newman Error` message with a description of the error:
+If the Newman Run failed before running the Collection (couldn't find the collection or the environment in your workspace) or there was a syntax error within a test etc. This will return a `Newman Error` message with a description of the error:
 
 ![Newman Run Error](./public/Slack_Bot_Newman_Fail.PNG)
 
@@ -206,16 +195,13 @@ The Slack message output looks the _same_ but the `title` is now a hyperlink tha
 
 ![Dashboard Report](./public/Dashboard_Template.PNG)
 
-The report is created using an optional custom template file, this can be found in the `./reports/templates` folder. The `newman-reporter-htmlextra` reporter will just create a default styled report if you don't add the `template` property.
-
 To use a different template, you will need to change the path of the `template` option:
 
 ```javascript
             reporters: ['htmlextra'],
             reporter: {
                 htmlextra: {
-                    export: './reports/htmlResults.html',
-                    template: '<path to template>'
+                    export: './reports/htmlResults.html'
                 }
             }
 ```
