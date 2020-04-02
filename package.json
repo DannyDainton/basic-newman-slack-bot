@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "start-tunnel": "lt --subdomain newman-app --port 3000"
+    "start-tunnel": "lt --subdomain newman-app -h \"http://serverless.social\" --port 3000"
   },
   "keywords": [],
   "author": "Danny Dainton",
@@ -13,10 +13,11 @@
   "dependencies": {
     "axios": "^0.18.1",
     "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "^4.15.3",
     "localtunnel": "^1.9.1",
-    "newman": "^4.4.1",
-    "newman-reporter-htmlextra": "^1.6.10",
+    "newman": "^4.6.0",
+    "newman-reporter-htmlextra": "^1.12.1",
     "pretty-ms": "^4.0.0"
   },
   "repository": {
