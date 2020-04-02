@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.static('reports'));
 
-const apikey = 'PUT YOUR API KEY HERE'
+const apikey = process.env.API_KEY
 
 class TestRunContext {
     constructor(newmanResult) {

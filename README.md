@@ -26,7 +26,9 @@ Clone this `basic-newman-slack-bot` repo and install all the npm modules using t
 
 The `basic-newman-slack-bot` will search in your Postman workspace for the collection and the environment to execute tests. All you need is a valid API key. You can get your key from the [integrations dashboard](https://go.postman.co/integrations/services/pm_pro_api).
 
-We'll be using the [Postman echo](https://docs.postman-echo.com/?version=latest), this is a publicly available Collection released by Postman team. It icnludes many examples in test scripts. 
+We'll be using the [Postman echo](https://docs.postman-echo.com/?version=latest), this is a publicly available Collection released by Postman team. It includes many examples in test scripts. 
+
+Create an environment file with the name : `.env` and add a variable `API_KEY` with the value of the api key generated previously in Postman website.
 
 In the same terminal, navigate to the cloned directory and start the `express` server using the `npm start` command. This will start the app on port `3000`.
 
